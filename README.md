@@ -8,13 +8,17 @@ It does not change your company password. Use it after changing that password th
 
 ![Exchange Password window. The account line is a sample.](screenshot.png)
 
-## Use
+## Install
+
+Download the DMG from [Releases](https://github.com/adrianov/macos-exchange-password-changer/releases), then drag **Exchange Password** to Applications. The app is not notarized, so right-click it and choose **Open** on the first launch.
+
+Choose the Exchange account, enter its new password twice, and click **Update password**. On the first run, allow control of Mail and System Events in **System Settings → Privacy & Security → Automation**.
+
+## Build from source
 
 ```sh
 ./build.sh
 open "build/Exchange Password.app"
 ```
-
-Choose the Exchange account, enter its new password twice, and click **Update password**. On the first run, allow control of Mail and System Events in **System Settings → Privacy & Security → Automation**.
 
 Copyright © 2026 Peter Adrianov. Licensed under the MIT License.
