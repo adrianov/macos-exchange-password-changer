@@ -4,7 +4,7 @@ Sets a new password on the Exchange account Mail already has.
 
 Mail’s password dialog checks the password, then tries to create another account with the same user name. macOS rejects that with “This account already exists,” and the new password is never saved. This app sets the password on the existing account, then tells Mail to reconnect. A successful connection saves the password. If Mail asks for the password again, the new password was not saved.
 
-The app does not change your company password, and it does not delete or recreate the account. The password is not written to disk.
+The app does not change your company password, and it does not delete or recreate the account. macOS stores the new password in the keychain for that account.
 
 ![Exchange Password window. The account line is a sample.](screenshot.png)
 
