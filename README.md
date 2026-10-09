@@ -6,6 +6,8 @@ Mail’s password dialog checks the password, then tries to create another accou
 
 The app does not change your company password, and it does not delete or recreate the account. The password is not written to disk.
 
+![Exchange Password window. The account line is a sample.](screenshot.png)
+
 Copyright © 2026 Peter Adrianov. Licensed under the MIT License.
 
 ## Use
@@ -26,3 +28,4 @@ Enter the password you already changed at your company. Closing the window quits
 - `Sources/MailPassword.swift` — close the stuck dialog and set the password through Mail
 - `Info.plist` — name and bundle id
 - `build.sh` — build `build/Exchange Password.app`
+- `screenshot.png` — window picture with a sample account
