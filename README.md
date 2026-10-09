@@ -1,14 +1,12 @@
-# Exchange Password
+# macOS Mail Exchange Password Changer
 
-Sets a new password on the Exchange account Mail already has.
+After a company password change, macOS Mail may reject the new Exchange password with “This account already exists.” The usual workaround is to remove and recreate the account.
 
-Mail’s password dialog checks the password, then tries to create another account with the same user name. macOS rejects that with “This account already exists,” and the new password is never saved. This app sets the password on the existing account, then tells Mail to reconnect. A successful connection saves the password. If Mail asks for the password again, the new password was not saved.
+This utility stores the new password in the macOS keychain for the existing account. Mail can reconnect without removing the account, changing its settings, or downloading its data again.
 
-The app does not change your company password, and it does not delete or recreate the account. macOS stores the new password in the keychain for that account.
+It does not change your company password. Use it after changing that password through your company.
 
 ![Exchange Password window. The account line is a sample.](screenshot.png)
-
-Copyright © 2026 Peter Adrianov. Licensed under the MIT License.
 
 ## Use
 
@@ -17,15 +15,6 @@ Copyright © 2026 Peter Adrianov. Licensed under the MIT License.
 open "build/Exchange Password.app"
 ```
 
-On the first run, allow the app to control Mail and System Events (System Settings → Privacy & Security → Automation). If Mail is showing the stuck password dialog, the app clicks Cancel, then sets the password on the existing account.
+Choose the Exchange account, enter its new password twice, and click **Update password**. On the first run, allow control of Mail and System Events in **System Settings → Privacy & Security → Automation**.
 
-Enter the password you already changed at your company. Closing the window quits the app.
-
-## Layout
-
-- `Sources/ExchangePasswordApp.swift` — window for the account and password
-- `Sources/ExchangeAccount.swift` — Exchange accounts from Mail
-- `Sources/MailPassword.swift` — close the stuck dialog and set the password through Mail
-- `Info.plist` — name and bundle id
-- `build.sh` — build `build/Exchange Password.app`
-- `screenshot.png` — window picture with a sample account
+Copyright © 2026 Peter Adrianov. Licensed under the MIT License.
