@@ -1,0 +1,11 @@
+# Exchange Password
+
+macOS app that stores a new password on the Exchange account Mail already has.
+
+- `Sources/ExchangePasswordApp.swift` — window for choosing the account and entering the password
+- `Sources/ExchangeAccount.swift` — reads Exchange accounts from Mail
+- `Sources/MailPassword.swift` — closes Mail’s stuck password dialog and sets the password through Mail
+- `Info.plist` — bundle id `local.exchange-password`
+- `build.sh` — builds `build/Exchange Password.app`
+- `README.md` — what the app does and how to run it
+- `LICENSE` — MIT, Copyright © 2026 Peter Adrianov
