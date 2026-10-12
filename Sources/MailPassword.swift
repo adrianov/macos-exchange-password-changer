@@ -11,8 +11,12 @@ enum MailPassword {
     static func update(_ account: ExchangeAccount, password: String) async throws -> String {
         try validate(password)
         let started = try await apply(account, password: password)
-        try await ensureStored(since: started)
-        return confirmation(account)
+        if await storedPermanently(since: started) {
+            return confirmation(account)
+        }
+        NSWorkspace.shared.open(URL(string: internetAccountsURL)!)
+        return "macOS stored the new password only temporarily. In the Internet Accounts "
+            + "window that opened, select \(account.name) and approve the change to keep it."
     }
 
     private static func validate(_ password: String) throws {
@@ -47,17 +51,19 @@ enum MailPassword {
         }
     }
 
-    /// Mail’s first save is often rejected. A later credential change means the password was stored.
-    private static func ensureStored(since start: Date) async throws {
-        var refused = false
+    /// A credential change with no scheduled removal means macOS kept the password.
+    /// A removal marker means it saved only a temporary copy that needs the user’s approval.
+    private static func storedPermanently(since start: Date) async -> Bool {
+        var changed = false
         for attempt in 0..<4 {
             let output = logOutput(since: start)
-            if output.contains("property credential changed") { return }
-            refused = refused || output.contains("Code=5")
-            if !refused { return }
-            if attempt < 3 { try await Task.sleep(for: .seconds(4)) }
+            if output.contains("will remove later") || output.contains("cleanup activity credential removal") {
+                return false
+            }
+            changed = changed || output.contains("property credential changed")
+            if attempt < 3 { try? await Task.sleep(for: .seconds(4)) }
         }
-        throw UpdateError.message("The system refused to store the password on the existing account.")
+        return changed
     }
 
     private static func confirmation(_ account: ExchangeAccount) -> String {
@@ -172,7 +178,10 @@ private func logOutput(since start: Date) -> String {
     return String(data: pipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
 }
 
-private let logPredicate = "(process == \"accountsd\" AND eventMessage CONTAINS \"Code=5\") OR eventMessage CONTAINS \"property credential changed\""
+private let internetAccountsURL = "x-apple.systempreferences:com.apple.Internet-Accounts-Settings.extension"
+
+private let logPredicate = "process == \"accountsd\" AND (eventMessage CONTAINS \"property credential changed\""
+    + " OR eventMessage CONTAINS \"will remove later\" OR eventMessage CONTAINS \"cleanup activity credential removal\")"
 
 private func logStamp(_ start: Date) -> String {
     let formatter = DateFormatter()

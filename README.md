@@ -14,6 +14,8 @@ Download the DMG from [Releases](https://github.com/adrianov/macos-exchange-pass
 
 Choose the Exchange account, enter its new password twice, and click **Update password**. On the first run, allow control of Mail and System Events in **System Settings → Privacy & Security → Automation**.
 
+If macOS keeps the password only temporarily, the app opens **System Settings → Internet Accounts**. Select the account there and approve the change so macOS stores it for good.
+
 ## Build from source
 
 ```sh
