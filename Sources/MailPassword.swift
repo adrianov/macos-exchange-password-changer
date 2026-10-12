@@ -5,7 +5,7 @@ enum UpdateError: Error {
     case message(String)
 }
 
-/// Writes a new password into the Exchange account Mail already has.
+/// Asks Mail to store a new password on its existing Exchange account.
 enum MailPassword {
     @MainActor
     static func update(_ account: ExchangeAccount, password: String) async throws -> String {
@@ -14,9 +14,10 @@ enum MailPassword {
         if await storedPermanently(since: started) {
             return confirmation(account)
         }
-        NSWorkspace.shared.open(URL(string: internetAccountsURL)!)
-        return "macOS stored the new password only temporarily. In the Internet Accounts "
-            + "window that opened, select \(account.name) and approve the change to keep it."
+        throw UpdateError.message(
+            "macOS kept the password only temporarily. Internet Accounts has no approval "
+                + "that can make it permanent; its password form reaches the same “account already exists” error."
+        )
     }
 
     private static func validate(_ password: String) throws {
@@ -52,7 +53,7 @@ enum MailPassword {
     }
 
     /// A credential change with no scheduled removal means macOS kept the password.
-    /// A removal marker means it saved only a temporary copy that needs the user’s approval.
+    /// A removal marker means it saved only a temporary copy.
     private static func storedPermanently(since start: Date) async -> Bool {
         var changed = false
         for attempt in 0..<4 {
@@ -177,8 +178,6 @@ private func logOutput(since start: Date) -> String {
     waitForExit(task)
     return String(data: pipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
 }
-
-private let internetAccountsURL = "x-apple.systempreferences:com.apple.Internet-Accounts-Settings.extension"
 
 private let logPredicate = "process == \"accountsd\" AND (eventMessage CONTAINS \"property credential changed\""
     + " OR eventMessage CONTAINS \"will remove later\" OR eventMessage CONTAINS \"cleanup activity credential removal\")"

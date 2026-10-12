@@ -47,7 +47,7 @@ struct PasswordScreen: View {
     var body: some View {
         Form {
             Section {
-                Text("Mail’s password window cannot save a new password into an Exchange account that is already on this Mac. Enter the password you set with your company. This stores it on that same account.")
+                Text("Mail may reject a new Exchange password with “This account already exists.” Enter the password you set with your company to retry the existing account without removing it.")
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
